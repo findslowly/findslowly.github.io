@@ -21,6 +21,36 @@
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 </head>
 
 
@@ -104,9 +134,7 @@
     <div class="entry">
       
         <p>哈，明天就是3.8号啦，也就是我的20岁来临的日子，也是妈妈的受难日，先向她致以感谢！</p>
-<p>回首看这些日子，真的感觉过得很快，现在我还能清晰地记得初中报名的那一天和高中第一天的情形，那些无暇的时光啊。现在感觉大学也快要结束了，
-虽然大一大二没有很多特殊经历，没有悟得啥大道理，并且也有过很多迷茫、怀疑和无助。但走到现在，发现自己渐渐成熟，在慢慢地形成自己的思想，
-这就算一种幸福吧。</p>
+<p>回首看这些日子，真的感觉过得很快，现在我还能清晰地记得初中报名的那一天和高中第一天的情形，那些无暇的时光啊。现在感觉大学也快要结束了，<br>虽然大一大二没有很多特殊经历，没有悟得啥大道理，并且也有过很多迷茫、怀疑和无助。但走到现在，发现自己渐渐成熟，在慢慢地形成自己的思想，<br>这就算一种幸福吧。</p>
 <p>在未来的生活中，我会面对更加不定的环境和选择，我想在这个时候在这里写下我的人生信仰：</p>
 <blockquote>
 <p>No pain, no gain! </p>
@@ -154,6 +182,8 @@
   
     <li><a href="/tags/Life/">Life</a><small>2</small></li>
   
+    <li><a href="/tags/Machine Learning/">Machine Learning</a><small>1</small></li>
+  
     <li><a href="/tags/Others/">Others</a><small>1</small></li>
   
     <li><a href="/tags/SJTU/">SJTU</a><small>1</small></li>
@@ -184,6 +214,8 @@
   $('.fancybox').fancybox();
 })(jQuery);
 </script>
+
+
 
 </body>
 </html>

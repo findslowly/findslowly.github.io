@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2014/3 | Xun&#39;s blog</title>
+  <title>Archives: 2014/5 | Xun&#39;s blog</title>
   <meta name="author" content="Xun Xu">
   
   
@@ -76,7 +76,7 @@
 <div class="clearfix"></div></header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
-<h2 class="archive-title">2014/3</h2>
+<h2 class="archive-title">2014/5</h2>
 
 
   
@@ -86,66 +86,37 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-03-16T15:43:05.000Z"><a href="/2014/03/16/选择/">Mar 16 2014</a></time>
+        <time datetime="2014-05-17T08:28:59.000Z"><a href="/2014/05/17/hidden-markov-model/">May 17 2014</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/03/16/选择/">选择</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>这些日子，我面临着很多选择：出国还是工作，暑期实习还是进实验室，要不要申请大四上的交换项目。其实，终究来说是自己没有想清楚未来到底要怎么走，自己到底要什么。</p>
-<p>我想过，我目前有两个兴趣点。一是自己的本专业，CS，对于编程还是有兴趣的，并且想通过技术来改变一些事和人。第二个点就是关于人的科学，比如说心理学、社会学。而找到兴趣点后，就要列出一个目标去追求它。所以第一，我买了本《编程之美》，想要花些时间研究，真正的按照自己的步伐看。第二。我目前在上一门心理学选修课，可以通过这个和老师多多交流。</p>
-<p>所以，我想来想去觉得，自己还是要做一些影响他人、社会的事情，并且目前很重要的一点是摆脱对父母的经济依赖，我发现当有经济问题摆在面前时，自己很容易受到父母观点的影响。</p>
-<p>不疯魔，不成活。的确，如果每天早上起来没有激情的话，我就要考虑换方向了。而人是不是可以保持一辈子激情呢？</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  
-    <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-03-07T15:45:38.000Z"><a href="/2014/03/07/happy-20th-birthday/">Mar 7 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/03/07/happy-20th-birthday/">Happy 20th Birthday</a></h1>
+    <h1 class="title"><a href="/2014/05/17/hidden-markov-model/">Hidden Markov Model</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>哈，明天就是3.8号啦，也就是我的20岁来临的日子，也是妈妈的受难日，先向她致以感谢！</p>
-<p>回首看这些日子，真的感觉过得很快，现在我还能清晰地记得初中报名的那一天和高中第一天的情形，那些无暇的时光啊。现在感觉大学也快要结束了，<br>虽然大一大二没有很多特殊经历，没有悟得啥大道理，并且也有过很多迷茫、怀疑和无助。但走到现在，发现自己渐渐成熟，在慢慢地形成自己的思想，<br>这就算一种幸福吧。</p>
-<p>在未来的生活中，我会面对更加不定的环境和选择，我想在这个时候在这里写下我的人生信仰：</p>
-<blockquote>
-<p>No pain, no gain! </p>
-</blockquote>
-<p>我一直坚信没有付出就不会有收获。不管别人是怎样得到的，别人走了什么捷径，如果我没有付出就得到了的话，那我是不会想要的。</p>
-<p>Stay true to yourself!</p>
-
+        <p>今天我来浅析下隐型马尔科夫模型（Hiddem Markov Model），不过目前对这个模型的背景还不了解，之后了解了再来改吧。我所写的内容大部分是根据Youtube上这个大学的<a href="https://www.youtube.com/watch?v=jY2E6ExLxaw" target="_blank">视频</a>而来的。</p>
+<h1 id="1_背景">1 背景</h1>
+<p>故事背景是这样的：人一天有很多的心情变化，时而喜悦，时而悲伤。人在这些不同的心情下有不同的行为。假设现在有一个房间，里面有一个人，阿寻。我们每隔一小时去看望一下他，他可能在做不同的事，比如说：看电视、唱歌、哭泣。那么根据阿寻一个时刻的行为我们能不能推测到他那个时刻的心情呢？还有，阿寻同学一天的行为可能有着某种关联，那么根据之前我们观察到的一系列的行为，我们能不能推测他目前的心情呢？ </p>
+<p>好，在这个背景下，我们来把问题抽象下，建立一个模型。</p>
+<h1 id="2_背景模型">2 背景模型</h1>
+<p>假设$X_0$是他初始时刻的心情，$X_i$是他第i个小时的心情，$Y_i$是我们在第i个小时观察到的行为。我们可以把上面的情况变为这样的模型：</p>
+<p><img src="/img/2014.5.18.1.jpg" alt="Model Pic"></p>
+<p>从这个模型可以总结到这两点：</p>
+<ol>
+<li>每一小时的状态只由前一小时的状态决定，不受其他因素的影响。</li>
+<li>$X_i$是内在的状态，$Y_i$是外在的观察结果，并且$Y_i$由$X_i$决定。</li>
+</ol>
+<p>为了帮助之后的计算，我们假设与这个模型有关的一些概率分布：　<br>
       
     </div>
     <footer>
       
+        
+          <div class="alignleft">
+            <a href="/2014/05/17/hidden-markov-model/#more" class="more-link">Read More</a>
+          </div>
         
         
       

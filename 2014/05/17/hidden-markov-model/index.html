@@ -1,0 +1,302 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hidden Markov Model | Xun&#39;s blog</title>
+  <meta name="author" content="Xun Xu">
+  
+  <meta name="description" content="今天我来浅析下隐型马尔科夫模型（Hiddem Markov Model），不过目前对这个模型的背景还不了解，之后了解了再来改吧。我所写的内容大部分是根据Youtube上这个大学的视频而来的。
+1 背景
+故事背景是这样的：人一天有很多的心情变化，时而喜悦，时而悲伤。人在这些不同的心情下有不同的行为。假设现在有一个房间，里面有一个人，阿寻。我们每隔一小时去看望一下他，他可能在做不同的事，比如说：看电视、唱歌、哭泣。那么根据阿寻一个时刻的行为我们能不能推测到他那个时刻的心情呢？还有，阿寻同学一天的行为可能有着某种关联，那么根据之前我们观察到的一系列的行为，我们能不能推测他目前的心情呢？ 
+好，在这个背景下，我们来把问题抽象下，建立一个模型。
+2 背景模型
+假设$X_0$是他初始时刻的心情，$X_i$是他第i个小时的心情，$Y_i$是我们在第i个小时观察到的行为。我们可以把上面的情况变为这样的模型：
+
+从这个模型可以总结到这两点：
+
+每一小时的状态只由前一小时的状态决定，不受其他因素的影响。
+$X_i$是内在的状态，$Y_i$是外在的观察结果，并且$Y_i$由$X_i$决定。
+
+为了帮助之后的计算，我们假设与这个模型有关的一些概率分布：">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Hidden Markov Model"/>
+  <meta property="og:site_name" content="Xun&#39;s blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Xun&#39;s blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Xun&#39;s blog</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+      <li><a href="/marathon">Marathon</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-05-17T08:28:59.000Z"><a href="/2014/05/17/hidden-markov-model/">May 17 2014</a></time>
+      
+      
+  
+    <h1 class="title">Hidden Markov Model</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>今天我来浅析下隐型马尔科夫模型（Hiddem Markov Model），不过目前对这个模型的背景还不了解，之后了解了再来改吧。我所写的内容大部分是根据Youtube上这个大学的<a href="https://www.youtube.com/watch?v=jY2E6ExLxaw" target="_blank">视频</a>而来的。</p>
+<h1 id="1_背景">1 背景</h1>
+<p>故事背景是这样的：人一天有很多的心情变化，时而喜悦，时而悲伤。人在这些不同的心情下有不同的行为。假设现在有一个房间，里面有一个人，阿寻。我们每隔一小时去看望一下他，他可能在做不同的事，比如说：看电视、唱歌、哭泣。那么根据阿寻一个时刻的行为我们能不能推测到他那个时刻的心情呢？还有，阿寻同学一天的行为可能有着某种关联，那么根据之前我们观察到的一系列的行为，我们能不能推测他目前的心情呢？ </p>
+<p>好，在这个背景下，我们来把问题抽象下，建立一个模型。</p>
+<h1 id="2_背景模型">2 背景模型</h1>
+<p>假设$X_0$是他初始时刻的心情，$X_i$是他第i个小时的心情，$Y_i$是我们在第i个小时观察到的行为。我们可以把上面的情况变为这样的模型：</p>
+<p><img src="/img/2014.5.18.1.jpg" alt="Model Pic"></p>
+<p>从这个模型可以总结到这两点：</p>
+<ol>
+<li>每一小时的状态只由前一小时的状态决定，不受其他因素的影响。</li>
+<li>$X_i$是内在的状态，$Y_i$是外在的观察结果，并且$Y_i$由$X_i$决定。</li>
+</ol>
+<p>为了帮助之后的计算，我们假设与这个模型有关的一些概率分布：　<br><a id="more"></a></p>
+<h3 id="2-1_初始概率_$P(X_0)$">2.1 初始概率 $P(X_0)$</h3>
+<p>H: Happy, S: Sad</p>
+<p><table><tr><td></td><td>H</td><td>S</td></tr><tr><td>$P(X_0)$</td><td>0.7</td><td>0.3</td></tr></table><br>Assume he is easy to be happy~ </p>
+<h3 id="2-2_心情转移概率_$P(X_t|X_{t-1})$">2.2 心情转移概率 $P(X_t|X_{t-1})$</h3>
+<p>一个时刻的心情转移到下一个心情的概率，假设当高兴的时候，阿寻会很可能继续高兴，不过悲伤的情绪也很容易延续。那么可以得到下面的转移模型： </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">$X_t{.H}$</th>
+<th style="text-align:center">$X_t{.S}$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$X_{t-1}{.H}$</td>
+<td style="text-align:center">0.7</td>
+<td style="text-align:center">0.3</td>
+</tr>
+<tr>
+<td style="text-align:center">$X_{t-1}{.S}$</td>
+<td style="text-align:center">0.3</td>
+<td style="text-align:center">0.7</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-3_观察概率_$P(Y_t|X_t)$">2.3 观察概率 $P(Y_t|X_t)$</h3>
+<p>观察模型就是，给定阿寻的心情，他的行为可能是什么。假设有三种行为：看电视（W)、唱歌（S）、哭泣（C）。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">W</th>
+<th style="text-align:center">S</th>
+<th style="text-align:center">C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">H</td>
+<td style="text-align:center">0.3</td>
+<td style="text-align:center">0.6</td>
+<td style="text-align:center">0.1</td>
+</tr>
+<tr>
+<td style="text-align:center">S</td>
+<td style="text-align:center">0.2</td>
+<td style="text-align:center">0.2</td>
+<td style="text-align:center">0.6</td>
+</tr>
+</tbody>
+</table>
+<p>所以，在背景中的两个问题分别就是：</p>
+<ol>
+<li>求$P(X_t|Y_t)$ </li>
+<li>求$P(X_t|Y_1,Y_2,…,Y_t)$（给定从第一小时到第t小时的行为，相当于$Y_1 \bigcap Y_2…\bigcap Y_3$，之后的交集都写成这样的逗号形式）</li>
+</ol>
+<p>下面我们就来解决这两个问题！</p>
+<h1 id="3_模型计算">3 模型计算</h1>
+<p>首先第一个问题很简单，根据贝叶斯公式就可以算出来：$$P(X_t|Y_t)={P(Y_t|X_t)*P(X_t) \over P(Y_t)}$$</p>
+<p>现在关键是第二个问题，后面有一系列的行为，怎么考虑它们呢？下面我来介绍一下这样的两步计算，请看：</p>
+<h2 id="3-1_第一步：Prediction">3.1 第一步：Prediction</h2>
+<p>第一步叫Prediction，就是通过前t-1个观察到的行为来预测t时的心情，就是Prediction。那么怎么来算这个呢？先看两个引理：</p>
+<p>引理一：$P(A|C) = \Sigma_B P(A,B|C)$</p>
+<p>引理二：$P(A,B|C)=P(A|B,C)*P(B|C)$</p>
+<p>第一个引理比较显然，第二个引理用贝叶斯定理可以证明。好，怀揣着这两个助手，我们来算预测值：</p>
+<span>$$\begin{aligned}
+P(X_t|Y_{1:t-1}) & = \Sigma_{X_{t-1}} P(X_t,X_{t-1}|Y_{1:t-1}) \\ 
+& = \Sigma_{X_{t-1}} P(X_t|X_{t-1},Y_{1:t-1})*P(X_{t-1}|Y_{1:t-1}) \\ 
+& = \Sigma_{X_{t-1}} P(X_t|X_{t-1}*P(X_{t-1}|Y_{1:t-1})) 
+\end{aligned}$$</span>
+
+
+<p>这里，第一个等式是根据引理一，第二个等式根据引理二。重点在第三个等式：$Y_{1:t-1}$直接可以去掉。因为t时的心情只由t-1时心情决定，而于我们在前t-1次观察到的行为无关。</p>
+<p>最后，可以看到，我们只需要知道心情状态转移概率和上一个时段算出来的值。下面我们再来把t时段的行为考虑进来。</p>
+<h2 id="3-2_第二步：Bayes_update">3.2 第二步：Bayes update</h2>
+<p>先看下要用的另一种贝叶斯公式形式：</p>
+<p>引理三： $P(A|B,C) = {P(B|A,C)*P(A|C) \over P(B|C)}$</p>
+<p>下面来计算针对从1到t次观察行为的心情状态推测概率：</p>
+<span>$$\begin{aligned}
+P(X_t|Y_{1:t}) &= P(X_t|Y_{1:t-1},Y_t) \\
+&= {P(Y_t|X_t,Y_{1:t-1})*P(X_t|Y_{1:t-1}) \over P(Y_t|Y_{1:t-1})} \\
+&= {P(Y_t|X_t,Y_{1:t-1})*P(X_t|Y_{1:t-1}) \over \Sigma_{X_t} P(Y_t|X_t,Y_{1:t-1})*P(X_t|Y_{1:t-1})} \\ 
+&= {P(Y_t|X_t)*P(X_t|Y_{1:t-1}) \over \Sigma_{X_t} P(Y_t|X_t)*P(X_t|Y_{1:t-1})} 
+\end{aligned}$$</span>
+
+
+<p>在这个计算中，第三个等式用了引理一和二，第四个等式用到上面同样的方法去掉了$Y_{1:t-1}$。最后得到的式子就可以计算啦。</p>
+<h1 id="4_模型总结">4 模型总结</h1>
+<p>我认为人类的智能表现在人类的预测能力上，而在机器方面也是如此。HMM模型首先通过1到t-1次行为算出一个预测值，再将第t次行为整合进去算出最后的值。而$P(X_t|Y_{1:t})$需要$P(X_{t-1}|Y_{1:t-1})$的帮助，所以整个算法要一步步地计算出来。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/Machine Learning/">Machine Learning</a>
+  </div>
+
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<script type="text/javascript">
+  var duoshuoQuery = {short_name: 'undefined' };
+  (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';
+      ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+<!-- Duoshuo Comment END -->
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:findslowly.github.io">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Life/">Life</a><small>2</small></li>
+  
+    <li><a href="/tags/Machine Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/tags/Others/">Others</a><small>1</small></li>
+  
+    <li><a href="/tags/SJTU/">SJTU</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2014 Xun Xu
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+</html>

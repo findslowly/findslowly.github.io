@@ -21,6 +21,36 @@
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 </head>
 
 
@@ -68,11 +98,9 @@
       
         <p>今天想来谈谈我自己的学习方法。我觉得我从大一到大二都没有很好的掌握学习方法，导致学习效果不是很好。大三时参考我系第一Jesse同学的习惯，我觉得一下方法对于学习来说帮助很大：</p>
 <ol>
-<li><p>做笔记并且体用好笔记 
-我认为上课时的笔记很好地强化了学习。一是在做笔记的时候，我们就要把老师说在脑中过一遍，并在纸上写出来（尽量不要抄课件）。就算之后不看，我认为这种实时的效果还是要比光听要好。当然了，如果上课之后再来回顾下笔记内容是锦上添花了，所以记笔记时尽量清晰，可以用多种颜色的笔来区分重点。我目前使用红黑两种颜色，这个看个人习惯了。</p>
+<li><p>做笔记并且体用好笔记<br>我认为上课时的笔记很好地强化了学习。一是在做笔记的时候，我们就要把老师说在脑中过一遍，并在纸上写出来（尽量不要抄课件）。就算之后不看，我认为这种实时的效果还是要比光听要好。当然了，如果上课之后再来回顾下笔记内容是锦上添花了，所以记笔记时尽量清晰，可以用多种颜色的笔来区分重点。我目前使用红黑两种颜色，这个看个人习惯了。</p>
 </li>
-<li><p>上课后尽快完成作业
-大学很多同学都在最后一天来写作业，我认为这种方法不可取。第一，根据艾宾浩斯曲线，上完课的第一天应该是记忆下降最快的，如果在这一天来巩固下知识是很好的,做作业是一种方式。第二，提早完成作业能发现自己的更多问题，并有时间来学习和改正。而拖到最后一天时，多多少少都有一点交掉了事的情绪。 </p>
+<li><p>上课后尽快完成作业<br>大学很多同学都在最后一天来写作业，我认为这种方法不可取。第一，根据艾宾浩斯曲线，上完课的第一天应该是记忆下降最快的，如果在这一天来巩固下知识是很好的,做作业是一种方式。第二，提早完成作业能发现自己的更多问题，并有时间来学习和改正。而拖到最后一天时，多多少少都有一点交掉了事的情绪。 </p>
 </li>
 </ol>
 <p>这是我认为比较好的习惯，希望对你有帮助。</p>
@@ -117,6 +145,8 @@
   
     <li><a href="/tags/Life/">Life</a><small>2</small></li>
   
+    <li><a href="/tags/Machine Learning/">Machine Learning</a><small>1</small></li>
+  
     <li><a href="/tags/Others/">Others</a><small>1</small></li>
   
     <li><a href="/tags/SJTU/">SJTU</a><small>1</small></li>
@@ -147,6 +177,8 @@
   $('.fancybox').fancybox();
 })(jQuery);
 </script>
+
+
 
 </body>
 </html>
